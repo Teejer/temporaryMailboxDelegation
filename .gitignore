@@ -1,0 +1,11 @@
+# Logs / runtime state (regenerated locally)
+*.csv
+!sample-Access.csv
+MailboxAccessTracking.json
+AccessLog.csv
+
+# Windows downloaded-file markers
+*:Zone.Identifier
+
+# App auth secrets
+AppConfig.json
