@@ -17,7 +17,7 @@ function Add-DelegatedMailboxAccess {
     foreach ($right in $rights) {
         try {
             if ($right -eq 'SendAs') {
-                Add-ADPermission -Identity $Mailbox -User $Grantee -ExtendedRights 'Send As' -Confirm:$false | Out-Null
+                Add-RecipientPermission -Identity $Mailbox -Trustee $Grantee -AccessRights SendAs -Confirm:$false | Out-Null
             } else {
                 Add-MailboxPermission -Identity $Mailbox -User $Grantee -AccessRights $right -Confirm:$false | Out-Null
             }
@@ -50,7 +50,7 @@ function Remove-DelegatedMailboxAccess {
     foreach ($right in $Rights) {
         try {
             if ($right -eq 'SendAs') {
-                Remove-ADPermission -Identity $Mailbox -User $Grantee -ExtendedRights 'Send As' -Confirm:$false | Out-Null
+                Remove-RecipientPermission -Identity $Mailbox -Trustee $Grantee -AccessRights SendAs -Confirm:$false | Out-Null
             } else {
                 Remove-MailboxPermission -Identity $Mailbox -User $Grantee -AccessRights $right -Confirm:$false | Out-Null
             }
@@ -79,8 +79,8 @@ function Test-DelegatedMailboxAccessRemoved {
 
     foreach ($right in $Rights) {
         if ($right -eq 'SendAs') {
-            $perm = Get-ADPermission -Identity $Mailbox -User $Grantee -ErrorAction SilentlyContinue |
-                Where-Object { $_.ExtendedRights -contains 'Send As' }
+            $perm = Get-RecipientPermission -Identity $Mailbox -Trustee $Grantee -ErrorAction SilentlyContinue |
+                Where-Object { $_.AccessRights -contains 'SendAs' }
         } else {
             $perm = Get-MailboxPermission -Identity $Mailbox -User $Grantee -ErrorAction SilentlyContinue |
                 Where-Object { $_.AccessRights -contains $right }
