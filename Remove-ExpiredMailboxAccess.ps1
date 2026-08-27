@@ -24,6 +24,14 @@ param(
 Set-StrictMode -Version 2.0
 $ErrorActionPreference = 'Stop'
 
+# --- Print source line numbers on any uncaught error ---
+trap {
+    Write-Host "`nERROR: $($_.Exception.Message)" -ForegroundColor Red
+    Write-Host "  at $($_.InvocationInfo.ScriptName):$($_.InvocationInfo.ScriptLineNumber)" -ForegroundColor Red
+    Write-Host $_.ScriptStackTrace -ForegroundColor DarkGray
+    break
+}
+
 # --- Resolve script root + default paths ---
 # $PSScriptRoot is empty when dot-sourced, so fall back to the invoking file's path.
 $ScriptRoot = if ($PSScriptRoot) { $PSScriptRoot } else { Split-Path -Parent $MyInvocation.MyCommand.Path }
@@ -35,6 +43,7 @@ if (-not $LogPath)          { $LogPath = Join-Path $ScriptRoot 'AccessLog.csv' }
 # --- Load library + set shared log path ---
 . (Join-Path $LibPath 'Load-Library.ps1')
 $script:AccessLogPath = $LogPath
+$script:ErrorLogPath  = Join-Path $ScriptRoot 'ErrorLog.csv'
 
 if (-not (Test-Path $TrackingFilePath)) {
     Write-Warning "No tracking file found at $TrackingFilePath. Nothing to do."

@@ -31,6 +31,7 @@ function Connect-ToExchangeOnline {
         }
         return $true
     } catch {
+        Write-ErrorLog $_ | Out-Null
         Write-AccessLog -Action "Connect" -Status "Failed" -Details $_.Exception.Message
         Write-Error "Connection failed: $($_.Exception.Message)"
         return $false

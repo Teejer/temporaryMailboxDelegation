@@ -24,6 +24,7 @@ function Add-DelegatedMailboxAccess {
             Write-AccessLog -Action "Grant $right" -Grantee $Grantee -Mailbox $Mailbox -StartDate $StartDate -EndDate $EndDate -Status "Success" -Details "OK"
             $results += [PSCustomObject]@{ Right = $right; Success = $true }
         } catch {
+            Write-ErrorLog $_ | Out-Null
             Write-AccessLog -Action "Grant $right" -Grantee $Grantee -Mailbox $Mailbox -StartDate $StartDate -EndDate $EndDate -Status "Failed" -Details $_.Exception.Message
             Write-Warning "FAILED Grant $right for $Grantee -> $Mailbox : $($_.Exception.Message)"
             $results += [PSCustomObject]@{ Right = $right; Success = $false }
@@ -57,6 +58,7 @@ function Remove-DelegatedMailboxAccess {
             Write-AccessLog -Action "Remove $right" -Grantee $Grantee -Mailbox $Mailbox -EndDate $EndDate -Status "Success" -Details "OK"
             $results += [PSCustomObject]@{ Right = $right; Success = $true }
         } catch {
+            Write-ErrorLog $_ | Out-Null
             Write-AccessLog -Action "Remove $right" -Grantee $Grantee -Mailbox $Mailbox -EndDate $EndDate -Status "Failed" -Details $_.Exception.Message
             Write-Warning "FAILED Remove $right for $Grantee -> $Mailbox : $($_.Exception.Message)"
             $results += [PSCustomObject]@{ Right = $right; Success = $false }
