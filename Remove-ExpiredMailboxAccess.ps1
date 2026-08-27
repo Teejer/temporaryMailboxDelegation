@@ -43,7 +43,7 @@ if (-not $LogPath)          { $LogPath = Join-Path $ScriptRoot 'AccessLog.csv' }
 # --- Load library + set shared log path ---
 . (Join-Path $LibPath 'Load-Library.ps1')
 $script:AccessLogPath = $LogPath
-$script:ErrorLogPath  = Join-Path $ScriptRoot 'ErrorLog.csv'
+$script:ErrorLogPath  = Join-Path $ScriptRoot ("ErrorLog_{0:MM}.csv" -f (Get-Date))
 
 if (-not (Test-Path $TrackingFilePath)) {
     Write-Warning "No tracking file found at $TrackingFilePath. Nothing to do."

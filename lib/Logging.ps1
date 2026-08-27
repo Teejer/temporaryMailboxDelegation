@@ -37,7 +37,7 @@ function Write-ErrorLog {
     param([System.Management.Automation.ErrorRecord]$ErrorRecord)
 
     $logPath = $script:ErrorLogPath
-    if (-not $logPath) { $logPath = "$env:TEMP\ErrorLog.csv" }
+    if (-not $logPath) { $logPath = "$env:TEMP\ErrorLog_$(Get-Date -Format 'MM').csv" }
 
     $function = ''
     $stack = Get-PSCallStack

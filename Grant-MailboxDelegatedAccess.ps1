@@ -55,7 +55,7 @@ if (-not (Test-Path $CsvPath -PathType Leaf)) {
 # --- Load library + set shared log path ---
 . (Join-Path $LibPath 'Load-Library.ps1')
 $script:AccessLogPath = $LogPath
-$script:ErrorLogPath  = Join-Path $ScriptRoot 'ErrorLog.csv'
+$script:ErrorLogPath  = Join-Path $ScriptRoot ("ErrorLog_{0:MM}.csv" -f (Get-Date))
 
 # --- Module check + connect ---
 if (-not (Get-Command Connect-ExchangeOnline -ErrorAction SilentlyContinue)) {
